@@ -111,7 +111,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const colors = [
+    const allColors = [
       { name: "Red", hex: "#e74c3c" },
       { name: "Orange", hex: "#f39c12" },
       { name: "Yellow", hex: "#f1c40f" },
@@ -120,26 +120,7 @@
       { name: "Purple", hex: "#9b59b6" }
     ];
 
-    let enabledColors = [];
-
-    async function loadEnabledColors() {
-      const ref = doc(db, "settings", "disabledColors");
-      const snap = await getDoc(ref);
-      const disabled = snap.exists() ? snap.data() : {};
-
-      enabledColors = colors.filter(c => !disabled[c.name]);
-
-      if (enabledColors.length === 0) {
-        document.getElementById("results").innerHTML = `<span style="color:red;">All colors are disabled in admin.</span>`;
-        document.getElementById("rollBtn").disabled = true;
-        return;
-      }
-
-      document.getElementById("rollBtn").disabled = false;
-      rollDice();
-    }
-
-    function delayedRoll() {
+    async function delayedRoll() {
       const diceContainer = document.getElementById("dice");
       const resultContainer = document.getElementById("results");
       const rollBtn = document.getElementById("rollBtn");
@@ -154,8 +135,20 @@
       sound.currentTime = 0;
       sound.play();
 
+      // Get current enabled colors before rolling
+      const ref = doc(db, "settings", "disabledColors");
+      const snap = await getDoc(ref);
+      const disabled = snap.exists() ? snap.data() : {};
+      const enabledColors = allColors.filter(c => !disabled[c.name]);
+
+      if (enabledColors.length === 0) {
+        rollingText.style.display = "none";
+        resultContainer.innerHTML = `<span style="color:red;">All colors are disabled in admin.</span>`;
+        return;
+      }
+
       setTimeout(() => {
-        rollDice();
+        rollDice(enabledColors);
         rollingText.style.display = "none";
         rollBtn.disabled = false;
 
@@ -168,7 +161,7 @@
     }
     window.delayedRoll = delayedRoll;
 
-    function rollDice() {
+    function rollDice(enabledColors) {
       const diceContainer = document.getElementById("dice");
       const resultContainer = document.getElementById("results");
       diceContainer.innerHTML = "";
@@ -191,14 +184,12 @@
       const parts = [];
 
       for (const [color, count] of Object.entries(countMap)) {
-        const hex = colors.find(c => c.name === color).hex;
+        const hex = allColors.find(c => c.name === color).hex;
         parts.push(`<span style="color:${hex}">${count} ${color}${count > 1 ? 's' : ''}</span>`);
       }
 
       resultContainer.innerHTML = resultText + parts.join(', ');
     }
-
-    loadEnabledColors();
   </script>
 </body>
 </html>
