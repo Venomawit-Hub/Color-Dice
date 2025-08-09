@@ -1,225 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Color Roulette Spinner</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle, #0f1f3a, #060d1c);
-      color: white;
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-
-    .wheels {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    .wheel-wrapper {
-      position: relative;
-      width: 260px;
-      height: 260px;
-    }
-
-    .pointer {
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%) rotate(180deg);
-      width: 0;
-      height: 0;
-      border-left: 12px solid transparent;
-      border-right: 12px solid transparent;
-      border-top: 24px solid white;
-      z-index: 10;
-    }
-
-    canvas {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: #222;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-    }
-
-    .center-cube {
-      position: absolute;
-      width: 70px;
-      height: 70px;
-      top: 95px;
-      left: 95px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px white, inset 0 0 8px rgba(255,255,255,0.7);
-      z-index: 5;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      font-weight: bold;
-      color: white;
-      text-shadow: 1px 1px 4px black;
-    }
-
-    button {
-      margin-top: 30px;
-      padding: 12px 28px;
-      font-size: 18px;
-      background: #23d5ab;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 0 10px #23d5ab;
-    }
-
-    .result {
-      margin-top: 20px;
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .color-guide {
-      margin-top: 20px;
-      font-size: 16px;
-    }
-
-    .color-guide span {
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Color Roulette Spinner</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle, #0f1f3a, #060d1c);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  h1 { font-size: 2rem; margin-bottom: 20px; }
+  .wheels {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .wheel-wrapper {
+    position: relative;
+    width: 220px;
+    height: 220px;
+  }
+  .pointer {
+    position: absolute;
+    bottom: 210px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 24px solid white;
+    z-index: 10;
+  }
+  canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #222;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  }
+  button {
+    margin: 18px 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #23d5ab;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 10px #23d5ab;
+  }
+  .color-guide {
+    margin-top: 20px;
+    font-size: 16px;
+  }
+  .color-guide span { font-weight: bold; }
+  .bottom-controls {
+    margin-top: 25px;
+  }
+</style>
 </head>
 <body>
-  <h1>🎡 Triple Color Roulette</h1>
-  <div class="wheels">
-    <div class="wheel-wrapper">
-      <div class="pointer"></div>
-      <div class="center-cube" id="cube1"></div>
-      <canvas id="wheel1" width="400" height="400"></canvas>
-    </div>
-    <div class="wheel-wrapper">
-      <div class="pointer"></div>
-      <div class="center-cube" id="cube2"></div>
-      <canvas id="wheel2" width="400" height="400"></canvas>
-    </div>
-    <div class="wheel-wrapper">
-      <div class="pointer"></div>
-      <div class="center-cube" id="cube3"></div>
-      <canvas id="wheel3" width="400" height="400"></canvas>
-    </div>
-  </div>
+<h1>🎡 Customizable Color Roulette</h1>
+
+<!-- Spin button stays on top -->
+<div>
   <button onclick="spinAll()">SPIN</button>
-  <div class="result" id="resultText"></div>
-  <div class="color-guide">
-    Possible colors are:
-    <span style="color:#ff3b3b">Red</span>,
-    <span style="color:#ff9800">Orange</span>,
-    <span style="color:#ffeb3b">Yellow</span>,
-    <span style="color:#4caf50">Green</span>,
-    <span style="color:#2196f3">Blue</span> and
-    <span style="color:#9c27b0">Purple</span>.
-  </div>
+</div>
 
-  <script>
-    const colors = [
-      { name: "Red", hex: "#ff3b3b", initial: "R" },
-      { name: "Orange", hex: "#ff9800", initial: "O" },
-      { name: "Yellow", hex: "#ffeb3b", initial: "Y" },
-      { name: "Green", hex: "#4caf50", initial: "G" },
-      { name: "Blue", hex: "#2196f3", initial: "B" },
-      { name: "Purple", hex: "#9c27b0", initial: "P" }
-    ];
+<!-- Wheels container -->
+<div class="wheels" id="wheelsContainer"></div>
 
-    function createWheel(canvasId, cubeId) {
-      const canvas = document.getElementById(canvasId);
-      const cube = document.getElementById(cubeId);
-      const ctx = canvas.getContext("2d");
-      const slices = 12;
-      const angle = (2 * Math.PI) / slices;
-      const repeatedColors = Array.from({ length: slices }, (_, i) => colors[i % colors.length]);
+<!-- Color guide -->
+<div class="color-guide">
+  Possible colors are:
+  <span style="color:#ff3b3b">Red</span>,
+  <span style="color:#ff9800">Orange</span>,
+  <span style="color:#ffeb3b">Yellow</span>,
+  <span style="color:#4caf50">Green</span>,
+  <span style="color:#2196f3">Blue</span> and
+  <span style="color:#9c27b0">Purple</span>.
+</div>
 
-      return {
-        draw: function(rotation = 0) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          for (let i = 0; i < slices; i++) {
-            const start = rotation + i * angle;
-            const end = start + angle;
-            ctx.beginPath();
-            ctx.moveTo(200, 200);
-            ctx.arc(200, 200, 200, start, end);
-            ctx.fillStyle = repeatedColors[i].hex;
-            ctx.fill();
-          }
-        },
-        spin: function(callback) {
-          let rotation = 0;
-          const totalRotations = Math.random() * 3 + 4;
-          const duration = 3000;
-          const startTime = performance.now();
+<!-- Add/Remove buttons moved to bottom -->
+<div class="bottom-controls">
+  <button onclick="addWheel()">➕ Add Wheel</button>
+  <button onclick="removeWheel()">➖ Remove Wheel</button>
+</div>
 
-          const easeOut = t => 1 - Math.pow(1 - t, 4);
-          cube.style.opacity = 0;
+<script>
+const colors = [
+  { name: "Red", hex: "#ff3b3b", initial: "R" },
+  { name: "Orange", hex: "#ff9800", initial: "O" },
+  { name: "Yellow", hex: "#ffeb3b", initial: "Y" },
+  { name: "Green", hex: "#4caf50", initial: "G" },
+  { name: "Blue", hex: "#2196f3", initial: "B" },
+  { name: "Purple", hex: "#9c27b0", initial: "P" }
+];
 
-          const animate = (now) => {
-            const elapsed = now - startTime;
-            const t = Math.min(elapsed / duration, 1);
-            const eased = easeOut(t);
-            rotation = totalRotations * 2 * Math.PI * eased;
-            this.draw(rotation);
-            if (t < 1) requestAnimationFrame(animate);
-            else {
-              const finalAngle = rotation % (2 * Math.PI);
-              const landedIndex = Math.floor((slices - finalAngle / angle) % slices);
-              const color = repeatedColors[landedIndex >= 0 ? landedIndex : landedIndex + slices];
-              cube.style.backgroundColor = color.hex;
-              cube.textContent = color.initial;
-              cube.style.opacity = 1;
-              callback(color.name);
-            }
-          };
+let wheels = [];
 
+function createWheel(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext("2d");
+  const slices = 12;
+  const angle = (2 * Math.PI) / slices;
+  const repeatedColors = Array.from({ length: slices }, (_, i) => colors[i % colors.length]);
+
+  return {
+    rotation: 0,
+    draw(rotation = 0) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate(rotation);
+      for (let i = 0; i < slices; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, canvas.width / 2, i * angle, (i + 1) * angle);
+        ctx.fillStyle = repeatedColors[i].hex;
+        ctx.fill();
+
+        ctx.save();
+        ctx.rotate(i * angle + angle / 2);
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "white";
+        ctx.font = "bold 24px Poppins";
+        ctx.rotate(Math.PI / 2);
+        ctx.fillText(repeatedColors[i].initial, 0, -canvas.width / 2.5);
+        ctx.restore();
+      }
+      ctx.restore();
+    },
+    spin() {
+      let startRotation = this.rotation;
+      const totalRotations = Math.random() * 3 + 4;
+      const duration = 3000;
+      const startTime = performance.now();
+      const easeOut = t => 1 - Math.pow(1 - t, 4);
+
+      const animate = (now) => {
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / duration, 1);
+        const eased = easeOut(t);
+        this.rotation = startRotation + totalRotations * 2 * Math.PI * eased;
+        this.draw(this.rotation);
+
+        if (t < 1) {
           requestAnimationFrame(animate);
         }
       };
+
+      requestAnimationFrame(animate);
     }
+  };
+}
 
-    const wheel1 = createWheel("wheel1", "cube1");
-    const wheel2 = createWheel("wheel2", "cube2");
-    const wheel3 = createWheel("wheel3", "cube3");
+function addWheel() {
+  const container = document.getElementById("wheelsContainer");
+  const index = wheels.length + 1;
 
-    wheel1.draw();
-    wheel2.draw();
-    wheel3.draw();
+  const wrapper = document.createElement("div");
+  wrapper.className = "wheel-wrapper";
 
-    function spinAll() {
-      const resultText = document.getElementById("resultText");
-      resultText.textContent = "Spinning...";
-      let results = [];
+  const pointer = document.createElement("div");
+  pointer.className = "pointer";
 
-      const collectResult = (color) => {
-        results.push(color);
-        if (results.length === 3) {
-          let message = results.join(", ");
-          resultText.textContent = message;
-        }
-      };
+  const canvas = document.createElement("canvas");
+  canvas.width = 400;
+  canvas.height = 400;
+  canvas.id = `wheel${index}`;
 
-      wheel1.spin(collectResult);
-      wheel2.spin(collectResult);
-      wheel3.spin(collectResult);
-    }
-  </script>
+  wrapper.appendChild(pointer);
+  wrapper.appendChild(canvas);
+  container.appendChild(wrapper);
+
+  const wheelObj = createWheel(canvas.id);
+  wheelObj.draw();
+  wheels.push(wheelObj);
+}
+
+function removeWheel() {
+  if (wheels.length > 0) {
+    wheels.pop();
+    const container = document.getElementById("wheelsContainer");
+    container.removeChild(container.lastChild);
+  }
+}
+
+function spinAll() {
+  wheels.forEach(wheel => wheel.spin());
+}
+
+// Start with 3 wheels
+for (let i = 0; i < 3; i++) addWheel();
+</script>
 </body>
 </html>
