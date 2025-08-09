@@ -63,10 +63,22 @@
   .bottom-controls {
     margin-top: 25px;
   }
+  /* Back button positioning */
+  .back-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
 </style>
 </head>
 <body>
-<h1>🎡 Customizable Color Roulette</h1>
+
+<!-- Back button -->
+<div class="back-btn">
+  <button onclick="window.history.back()">⬅ Back</button>
+</div>
+
+<h1>🎡Color Roulette</h1>
 
 <!-- Spin button stays on top -->
 <div>
