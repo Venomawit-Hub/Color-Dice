@@ -78,9 +78,23 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.4; }
     }
+
+    /* Back button styling for top-left */
+    .back-btn-container {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 9999;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Back button -->
+  <div class="back-btn-container">
+    <button onclick="window.history.back()">⬅ Back</button>
+  </div>
+
   <h1>🎲 Roll Color Dice</h1>
 
   <span style="font-size: 24px;">🎲</span>
@@ -98,6 +112,16 @@
   <div class="rolling" id="rollingText">Rolling...</div>
   <div class="dice-container" id="dice"></div>
   <div class="results" id="results"></div>
+
+  <div class="color-guide" style="margin-top:30px; font-size:16px;">
+    Possible colors are:
+    <span style="color:#ff3b3b">Red</span>,
+    <span style="color:#ff9800">Orange</span>,
+    <span style="color:#ffeb3b">Yellow</span>,
+    <span style="color:#4caf50">Green</span>,
+    <span style="color:#2196f3">Blue</span> and
+    <span style="color:#9c27b0">Purple</span>.
+  </div>
 
   <audio id="rollSound" preload="auto">
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2ce3e3dc89.mp3" type="audio/mp3">
@@ -201,6 +225,11 @@
       resultContainer.innerHTML = resultText;
       return resultText;
     }
+
+    // Roll 3 dice on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      rollDice(allColors, 3);
+    });
   </script>
 </body>
 </html>
