@@ -1,22 +1,88 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Color Game Hub</title>
   <style>
+    /* Navbar styles */
+    .navbar {
+      background-color: rgba(15, 31, 58, 0.9);
+      padding: 15px 25px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-title {
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 6px;
+      z-index: 101;
+    }
+
+    .hamburger .line {
+      width: 25px;
+      height: 3px;
+      background: white;
+      border-radius: 3px;
+      transition: 0.3s;
+    }
+
+    .dropdown {
+      position: fixed;
+      top: 60px;
+      right: -200px;
+      background-color: rgba(15, 31, 58, 0.95);
+      padding: 15px;
+      border-radius: 10px;
+      transition: 0.3s;
+      width: 180px;
+    }
+
+    .dropdown.active {
+      right: 20px;
+    }
+
+    .dropdown a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+      margin: 5px 0;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .dropdown a:hover {
+      background-color: #23d5ab;
+    }
+
+    /* Main styles */
     body {
       font-family: 'Poppins', sans-serif;
       background: radial-gradient(circle at center, #0f1f3a, #060d1c);
       color: white;
       text-align: center;
-      padding: 100px 20px;
+      padding-top: 80px;
     }
     h1 {
       font-size: 36px;
       margin-bottom: 40px;
     }
-    a {
+    .main-links a {
       display: inline-block;
       margin: 20px;
       padding: 16px 32px;
@@ -28,16 +94,46 @@
       box-shadow: 0 0 12px #23d5ab;
       transition: transform 0.2s ease;
     }
-    a:hover {
+    .main-links a:hover {
       transform: scale(1.08);
     }
   </style>
 </head>
 <body>
+  <nav class="navbar">
+    <a href="index.html" class="site-title">Luckyblox</a>
+    <div class="hamburger" onclick="toggleMenu()">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+    <div class="dropdown" id="menu">
+      <a href="rewards.html">🏆 Rewards</a>
+      <a href="exchange.html">💱 Exchange</a>
+      <a href="register.html">👤 Login / Sign Up</a>
+    </div>
+  </nav>
+
   <h1>🎮 Welcome to LuckyBlox</h1>
-  <a href="dice.html">🎲 Play Color Dice</a>
-  <a href="roulette.html">🎡 Play Color Roulette</a>
+  <div class="main-links">
+    <a href="dice.html">🎲 Play Color Dice</a>
+    <a href="roulette.html">🎡 Play Color Roulette</a>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      menu.classList.toggle('active');
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('menu');
+      const hamburger = document.querySelector('.hamburger');
+      if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
+        menu.classList.remove('active');
+      }
+    });
+  </script>
 </body>
 </html>
-
-
