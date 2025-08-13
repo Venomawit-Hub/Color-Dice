@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Color Game Hub</title>
   <style>
     /* Navbar styles */
     .navbar {
       background-color: rgba(15, 31, 58, 0.9);
-      padding: 15px 25px;
+      padding: 25px 35px;
       position: fixed;
       top: 0;
       left: 0;
@@ -20,7 +21,7 @@
 
     .site-title {
       color: white;
-      font-size: 1.5rem;
+      font-size: 2.4rem;
       font-weight: bold;
       text-decoration: none;
     }
@@ -34,8 +35,8 @@
     }
 
     .hamburger .line {
-      width: 25px;
-      height: 3px;
+      width: 30px;
+      height: 4px;
       background: white;
       border-radius: 3px;
       transition: 0.3s;
@@ -43,13 +44,13 @@
 
     .dropdown {
       position: fixed;
-      top: 60px;
+      top: 80px;
       right: -200px;
       background-color: rgba(15, 31, 58, 0.95);
       padding: 15px;
       border-radius: 10px;
       transition: 0.3s;
-      width: 180px;
+      width: 200px;
     }
 
     .dropdown.active {
@@ -60,10 +61,11 @@
       display: block;
       color: white;
       text-decoration: none;
-      padding: 10px 15px;
+      padding: 14px 20px;
       margin: 5px 0;
       border-radius: 6px;
       transition: background-color 0.3s;
+      font-size: 18px;
     }
 
     .dropdown a:hover {
@@ -76,26 +78,73 @@
       background: radial-gradient(circle at center, #0f1f3a, #060d1c);
       color: white;
       text-align: center;
-      padding-top: 80px;
+      padding-top: 120px;
+      margin: 0;
+      min-height: 100vh;
+      font-size: 18px;
     }
+
     h1 {
-      font-size: 36px;
-      margin-bottom: 40px;
+      font-size: 56px;
+      margin-bottom: 60px;
+      padding: 0 20px;
     }
+
+    .main-links {
+      padding: 0 15px;
+      margin-top: 50px;
+    }
+
     .main-links a {
       display: inline-block;
-      margin: 20px;
-      padding: 16px 32px;
-      font-size: 18px;
+      margin: 30px;
+      padding: 25px 50px;
+      font-size: 26px;
       text-decoration: none;
       background: #23d5ab;
       color: white;
-      border-radius: 12px;
-      box-shadow: 0 0 12px #23d5ab;
+      border-radius: 18px;
+      box-shadow: 0 0 20px #23d5ab;
       transition: transform 0.2s ease;
     }
+
     .main-links a:hover {
       transform: scale(1.08);
+    }
+
+    /* Media queries for responsive design */
+    @media (max-width: 768px) {
+      body {
+        font-size: 14px;
+        padding-top: 80px;
+      }
+
+      h1 {
+        font-size: 28px;
+        margin-bottom: 30px;
+      }
+
+      .main-links a {
+        display: block;
+        width: 80%;
+        max-width: 300px;
+        margin: 20px auto;
+        padding: 16px 20px;
+        font-size: 16px;
+      }
+
+      .site-title {
+        font-size: 1.5rem;
+      }
+
+      .navbar {
+        padding: 15px 25px;
+      }
+
+      .hamburger .line {
+        width: 25px;
+        height: 3px;
+      }
     }
   </style>
 </head>
