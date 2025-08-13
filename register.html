@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: radial-gradient(circle, #0f1f3a, #060d1c);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(35, 213, 171, 0.4);
+      width: 350px;
+      text-align: center;
+      position: relative;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #23d5ab;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 14px;
+    }
+    input::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #23d5ab;
+      color: #0f1f3a;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #1ebd94;
+    }
+    button:disabled {
+      background: #1ebd94;
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    p {
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    .message {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    .error {
+      color: #ff6b6b;
+    }
+    .success {
+      color: #23d5ab;
+    }
+    .password-wrapper {
+      position: relative;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      user-select: none;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 18px;
+    }
+    .toggle-password:hover {
+      color: #23d5ab;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Create Account</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="email" id="email" placeholder="Email" />
+    <div class="password-wrapper">
+      <input type="password" id="password" placeholder="Password" />
+      <span id="togglePassword" class="toggle-password" title="Show/Hide Password">👁️</span>
+    </div>
+    <button id="registerBtn">Register</button>
+    <p>Already have an account? <a href="login.html" style="color:#23d5ab;">Login</a></p>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBIYrRuPb82MqKrGNutxoo-jxK76yngGb8",
+      authDomain: "luckyblox-812c6.firebaseapp.com",
+      projectId: "luckyblox-812c6",
+      storageBucket: "luckyblox-812c6.firebasestorage.app",
+      messagingSenderId: "1096522379872",
+      appId: "1:1096522379872:web:9d2273ac966f5b2c53c905",
+      measurementId: "G-BDY7NQ24DG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+
+    document.getElementById("registerBtn").addEventListener("click", async () => {
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = passwordInput.value.trim();
+      const messageEl = document.getElementById("message");
+      const registerBtn = document.getElementById("registerBtn");
+
+      if (!username || !email || !password) {
+        messageEl.textContent = "Please fill in all fields.";
+        messageEl.className = "message error";
+        return;
+      }
+
+      try {
+        registerBtn.disabled = true;
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(userCredential.user, { displayName: username });
+        messageEl.textContent = "Account created successfully! Redirecting...";
+        messageEl.className = "message success";
+
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1500);
+
+      } catch (error) {
+        messageEl.textContent = error.message;
+        messageEl.className = "message error";
+        registerBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
